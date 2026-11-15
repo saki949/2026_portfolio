@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>黃于玲｜行銷企劃履歷</title>
+  <meta name="description" content="黃于玲的行銷企劃履歷：商業轉化 × 視覺整合 × AI 數據應用。">
+  <meta name="theme-color" content="#2438f0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="assets/css/site.css?v=8">
+</head>
+<body>
+  <main id="app"></main>
+  <noscript><p style="padding:24px">請開啟 JavaScript 以顯示履歷內容。</p></noscript>
+
+  <script src="assets/js/content.js?v=8"></script>
+  <script src="assets/js/qrcode.js?v=8"></script>
+  <script src="assets/js/editor.js?v=8"></script>
+  <script src="assets/js/resume.js?v=8"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').then(reg => {
+        reg.update();
+      }).catch(() => {});
+    }
+  </script>
+</body>
+</html>
