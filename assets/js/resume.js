@@ -114,7 +114,6 @@
           <dl>
             ${m.phone ? `<div><dt>電話</dt><dd><a href="tel:${esc(m.phone)}" data-path="meta.phone">${esc(m.phone)}</a></dd></div>` : ""}
             <div><dt>Email</dt><dd><a href="mailto:${esc(m.email)}" data-path="meta.email">${esc(m.email)}</a></dd></div>
-            ${m.onlineUrl ? `<div><dt>作品集</dt><dd><a href="${esc(m.onlineUrl)}" target="_blank" rel="noopener">線上連結</a></dd></div>` : ""}
           </dl>
         </div>
       </header>

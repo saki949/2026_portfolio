@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>黃于玲｜個人履歷與作品集</title>
   <meta name="description" content="黃于玲 A4 直式實體履歷與作品集，支援一鍵列印與另存為 PDF。">
-  <link rel="stylesheet" href="assets/css/print-booklet.css?v=3">
+  <link rel="stylesheet" href="assets/css/print-booklet.css?v=4">
 </head>
 <body class="preview-screen">
 
@@ -14,7 +14,7 @@
     <div class="pt-group">
       <div class="pt-title">
         📄 A4 直式個人履歷與作品集
-        <span>7 頁滿版裝訂冊</span>
+        <span id="sheetCountBadge">8 頁滿版裝訂冊</span>
       </div>
     </div>
 
@@ -31,6 +31,9 @@
       <button type="button" class="pt-btn" id="toggleSpreadBtn" title="切換單頁 / 雙頁對開螢幕預覽">
         📖 對開預覽
       </button>
+      <button type="button" class="pt-btn" id="editBookletBtn" title="點擊直接修改頁面文字">
+        ✏️ 編輯內容
+      </button>
       <button type="button" class="pt-btn primary" id="printBtn" title="立即呼叫系統列印或儲存為 PDF">
         🖨️ 一鍵列印 / 存為 PDF
       </button>
@@ -44,7 +47,7 @@
 
   <!-- 列印設定提示（列印時自動隱藏） -->
   <div class="pt-tip-bar no-print">
-    💡 <b>列印提示：</b>列印時請將【目的地】設為「另存為 PDF」或印表機，【邊界】設為「<b>無</b>」或「<b>預設</b>」，並勾選「<b>背景圖形</b>（Background graphics）」。
+    💡 <b>列印提示：</b>列印時請將【目的地】設為「另存為 PDF」或印表機，【邊界】設為「<b>無</b>」或「<b>預設</b>」，並勾選「<b>背景圖形</b>（Background graphics）」。右上角支援「<b>✏️ 編輯內容</b>」直接點選修改文字。
   </div>
 
   <!-- A4 紙張本體容器 -->
@@ -52,8 +55,8 @@
     <!-- 各頁內容由 JavaScript 動態渲染 -->
   </main>
 
-  <script src="assets/js/content.js?v=9"></script>
-  <script src="assets/js/qrcode.js?v=9"></script>
+  <script src="assets/js/content.js?v=12"></script>
+  <script src="assets/js/qrcode.js?v=12"></script>
   <script>
     (function () {
       "use strict";
@@ -101,7 +104,7 @@
               <div class="cover-sub-intro">個人履歷與作品集</div>
               <div class="cover-core-desc">
                 師大設計系畢業，具備 8–9 年跨領域實戰經驗。<br>
-                擅長動手解決具體問題：獨立視覺排版與印前完稿、第一線客群需求開拓，以及運用 Python 與 AI 梳理混亂資料、自動化繁瑣流程，專注把事情踏實做到位。
+                擅長動手解決具體問題：獨立視覺排版與印前完稿、第一線客群需求開拓，以及運用 Python 梳理資料、自動化繁瑣流程，專注把事情踏實做到位。
               </div>
             </div>
             <div class="cover-photo-box">
@@ -109,7 +112,7 @@
             </div>
           </div>
 
-          <!-- 5 大核心指標 -->
+          <!-- 5 大核心指標（斷句精緻平衡） -->
           <div class="cover-stats-row">
             ${d.stats.map(s => `
               <div class="cover-stat-item">
@@ -134,17 +137,16 @@
             <div class="cover-pillar-card">
               <div class="cpc-num">03</div>
               <h3>善用工具把混亂理出頭緒</h3>
-              <p>自己撰寫業務邏輯規則，運用 AI 作為 Copilot 編寫 Python 自動化腳本；建立專案知識庫輔助策略分析與客群疑慮演練。</p>
+              <p>自己撰寫業務邏輯規則，運用 Google Antigravity 與 Python 自動化腳本解決具體問題，縮減重複勞務、精準交付。</p>
             </div>
           </div>
 
-          <!-- 封面底部資訊與 QR Code -->
+          <!-- 封面底部資訊與 QR Code（拿掉居住地，學歷單行呈現） -->
           <div class="cover-bottom">
             <div class="cover-contacts">
               <div><b>聯絡電話</b><span>${m.phone || '0970-705-525'}</span></div>
               <div><b>電子信箱</b><span>${m.email || 'tracepk62@gmail.com'}</span></div>
-              <div><b>學歷背景</b><span>國立臺灣師範大學 設計學系 學士</span></div>
-              <div><b>作品連結</b><span>https://saki949.github.io/2026_portfolio/</span></div>
+              <div class="contact-full"><b>學歷背景</b><span>國立臺灣師範大學 設計系 學士（立體組 · 產品與室內設計學程）</span></div>
             </div>
             <div class="cover-qrcode-box">
               <div class="cover-qrcode-svg">${qrSvgCode}</div>
@@ -163,7 +165,7 @@
             <div class="sh-left">
               <b>${m.name} ｜ 個人簡介與工作歷程</b>
             </div>
-            <div class="sh-right">PAGE 02 / 07</div>
+            <div class="sh-right">PAGE 02 / 08</div>
           </header>
 
           <div class="sheet-body">
@@ -187,7 +189,7 @@
                 <div class="strength-card">
                   <span class="idx">03</span>
                   <h4>善用工具理清混亂</h4>
-                  <p>結合 Python 腳本與 AI 工具自動化處理大量文件與資料，縮減重複勞務，讓執行更敏捷準確。</p>
+                  <p>結合 Python 腳本與工具自動化處理大量文件與資料，縮減重複勞務，讓執行更敏捷準確。</p>
                 </div>
               </div>
             </section>
@@ -210,7 +212,7 @@
                   </div>
                   <ul class="jcu-bullets">
                     <li><b>從小巷工廠到千坪廠房：</b>以美工協助印前檔案加入，看見營運問題主動改善，逐步承接客群開發與服務，攜手將家庭式小廠拓展至近千坪新廠房與團隊擴編。</li>
-                    <li><b>名片濾掛（在生活裡爭取曝光）：</b>注意到房仲、車商與候選人名片容易被隨手丟掉，主動先將名片打樣成濾掛樣品上門提案，解決名片留存率低的痛點，開闢新客群。</li>
+                    <li><b>名片濾掛客製企劃：</b>注意到房仲、車商與候選人名片容易被隨手丟掉，主動先將名片打樣成濾掛樣品上門提案，解決名片留存率低的痛點，開闢新客群。</li>
                     <li><b>展場主動出擊開發：</b>參加茶酒咖啡展不只接待過路訪客，更主動走訪同場其他參展廠商，挖掘跨界包裝與企業伴手禮需求，達成 90% 以上成交率。</li>
                   </ul>
                 </div>
@@ -260,7 +262,7 @@
             <div class="sh-left">
               <b>${m.name} ｜ 工作歷程延續與核心技能</b>
             </div>
-            <div class="sh-right">PAGE 03 / 07</div>
+            <div class="sh-right">PAGE 03 / 08</div>
           </header>
 
           <div class="sheet-body">
@@ -300,7 +302,7 @@
               </div>
             </section>
 
-            <!-- 核心專業技能（真實能力，不膨風） -->
+            <!-- 核心專業技能（真實能力） -->
             <section class="p-sec">
               <div class="sec-title"><span>SKILLS &amp; TOOLS</span>核心能力與工具</div>
               <div class="skills-quad">
@@ -319,20 +321,20 @@
                 <div class="skill-block">
                   <h4>Python 自動化與資料處理</h4>
                   <div class="skill-pills">
-                    <span class="skill-pill">Python 資料清洗腳本</span>
-                    <span class="skill-pill">自動化批次處理</span>
-                    <span class="skill-pill">社群輿情觀測</span>
-                    <span class="skill-pill">Excel 數據整理</span>
+                    <span class="skill-pill">Python 自動化腳本</span>
+                    <span class="skill-pill">螢幕文字辨識 (OCR)</span>
+                    <span class="skill-pill">資料整理與比對</span>
+                    <span class="skill-pill">Excel 數據處理</span>
                   </div>
                 </div>
 
                 <div class="skill-block">
                   <h4>AI 工具實務整合</h4>
                   <div class="skill-pills">
+                    <span class="skill-pill">Google Antigravity 解決複雜問題</span>
                     <span class="skill-pill">專案知識庫建置 (Custom GPTs / Projects)</span>
-                    <span class="skill-pill">客群疑慮演練與策略輔助</span>
-                    <span class="skill-pill">AI Copilot 程式輔助</span>
-                    <span class="skill-pill">Midjourney / Firefly 視覺發想</span>
+                    <span class="skill-pill">客群疑慮演練與對話情境</span>
+                    <span class="skill-pill">AI 輔助工作流與效率優化</span>
                   </div>
                 </div>
 
@@ -354,7 +356,7 @@
               <div class="edu-cert-row">
                 <div class="ec-box">
                   <h4>國立臺灣師範大學 <span>2014/09 – 2018/06</span></h4>
-                  <p><b>設計學系 學士</b>（具備紮實美學構成、視覺傳達與印刷製程工法）</p>
+                  <p><b>設計學系 學士（立體組）</b><br>修習產品設計、室內設計學程，具備扎實立體造型、空間尺度、視覺傳達與印刷工法實務。</p>
                 </div>
                 <div class="ec-box">
                   <h4>專業證照與語言 <span>CREDENTIALS</span></h4>
@@ -371,13 +373,13 @@
           </footer>
         </article>
 
-        <!-- ==================== SHEET 4: 作品集 1 (包裝與商業企劃) ==================== -->
+        <!-- ==================== SHEET 4: 作品集 1 (精品系列包裝旗艦) ==================== -->
         <article class="sheet" id="sheet-4" data-sheet="4">
           <header class="sheet-header">
             <div class="sh-left">
               <b>${m.name} ｜ 作品集精選 · 商業企劃與精品系列包裝</b>
             </div>
-            <div class="sh-right">PAGE 04 / 07</div>
+            <div class="sh-right">PAGE 04 / 08</div>
           </header>
 
           <div class="portfolio-sheet-content">
@@ -393,8 +395,8 @@
               <p class="pfs-desc">
                 針對各產區風味繪製專屬手繪插畫，完成 18 款精品濾掛與 5 款大同高中校園客製包裝。跳脫傳統咖啡廳通路的削價競爭，從客製化切入新客群，帶動企業送禮與婚禮小物大量訂單，促成新廠房拓展。
               </p>
-              <!-- 大圖滿版：8 款包裝矩陣 -->
-              <div class="packaging-gallery-large">
+              <!-- 8 款包裝旗艦矩陣大圖 -->
+              <div class="packaging-gallery-hero">
                 <div class="pg-item">
                   <img src="assets/packaging/卡蘭索.webp" alt="卡蘭索">
                   <span>卡蘭索 · 耶加雪菲</span>
@@ -428,9 +430,37 @@
                   <span>大同高中客製 · 孔子像</span>
                 </div>
               </div>
-            </div>
 
-            <!-- 專案 2：尋味旅程品鑑活動與社群推廣 -->
+              <!-- 策略亮點小卡（填滿版面無空白） -->
+              <div class="packaging-sub-highlight">
+                <div>
+                  <h4>商務名片濾掛提案</h4>
+                  <p>跳脫傳統削價競爭，將名片打樣成精品濾掛樣品主動拜訪房仲與車商，解決紙本名片留存率低的痛點，轉化為高成交率的新客群。</p>
+                </div>
+                <div>
+                  <h4>校園客製與打樣製程</h4>
+                  <p>親自手繪大同高中經典校園地標插畫（大同道、孔子像等），把關打樣、材質耐受度與大量印前轉外框完稿製程。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <footer class="sheet-footer">
+            <span class="sf-badge">作品集 ｜ P. 04</span>
+          </footer>
+        </article>
+
+        <!-- ==================== SHEET 5: 作品集 2 (實體活動推廣與外銷型錄) ==================== -->
+        <article class="sheet" id="sheet-5" data-sheet="5">
+          <header class="sheet-header">
+            <div class="sh-left">
+              <b>${m.name} ｜ 作品集精選 · 實體活動推廣與雙語外銷型錄</b>
+            </div>
+            <div class="sh-right">PAGE 05 / 08</div>
+          </header>
+
+          <div class="portfolio-sheet-content">
+            <!-- 專案 2：尋味旅程品鑑活動與社群推廣（2 欄排版） -->
             <div class="p-feature-showcase">
               <div class="pfs-header">
                 <h3>
@@ -442,7 +472,7 @@
               <p class="pfs-desc">
                 展覽現場與門市招募 LINE 會員之文宣規劃，包含「尋味旅程」品鑑活動主海報、現場風味豆單設計，方便客人清楚理解風味並快速下單，並與其他展業跨界深度經營。
               </p>
-              <div class="showcase-strip-3">
+              <div class="showcase-grid-2">
                 <div class="ss-item">
                   <img src="assets/images/work/coffee_taste.webp" alt="品鑑海報">
                   <span>尋味旅程 · 活動品鑑海報</span>
@@ -451,30 +481,10 @@
                   <img src="assets/images/work/coffee_menu.webp" alt="現場風味豆單">
                   <span>現場風味豆單 · 清晰分類</span>
                 </div>
-                <div class="ss-item">
-                  <img src="assets/images/work/line_menu.webp" alt="LINE 數位點單">
-                  <span>LINE 官方帳號 · 數位菜單導流</span>
-                </div>
               </div>
             </div>
-          </div>
 
-          <footer class="sheet-footer">
-            <span class="sf-badge">作品集 ｜ P. 04</span>
-          </footer>
-        </article>
-
-        <!-- ==================== SHEET 5: 作品集 2 (外銷型錄與書籍完稿) ==================== -->
-        <article class="sheet" id="sheet-5" data-sheet="5">
-          <header class="sheet-header">
-            <div class="sh-left">
-              <b>${m.name} ｜ 作品集精選 · 外銷型錄、印前完稿與品牌視覺</b>
-            </div>
-            <div class="sh-right">PAGE 05 / 07</div>
-          </header>
-
-          <div class="portfolio-sheet-content">
-            <!-- 專案 3：兆田精密外銷型錄 -->
+            <!-- 專案 3：兆田精密外銷型錄（2 欄 × 2 列大圖排版） -->
             <div class="p-feature-showcase">
               <div class="pfs-header">
                 <h3>
@@ -486,7 +496,7 @@
               <p class="pfs-desc">
                 負責外銷單車配件與手工具之型錄（2026 DM），整理上百項產品數據、實物攝影修圖、去背與雙語排版完稿，於台北與德國等 6 場國際大展提供海外買主迅速查閱規格下單。
               </p>
-              <div class="showcase-strip-4">
+              <div class="showcase-grid-2x2">
                 <div class="ss-item">
                   <img src="assets/images/work/zt_dm_01.webp" alt="DM 封面">
                   <span>型錄封面 · 品牌形象</span>
@@ -505,39 +515,6 @@
                 </div>
               </div>
             </div>
-
-            <!-- 專案 4 & 5 雙欄大圖滿版 -->
-            <div class="projects-split-large">
-              <!-- 專案 4：渺渺品牌 & 貓頭鷹同人誌 -->
-              <div class="psl-card">
-                <div class="psl-head">
-                  <span class="psl-tag">原創插畫 · 標準字設計 · 裝幀完稿</span>
-                  <h4 class="psl-title">渺渺品牌概念 &amp; 小貓頭鷹封面字體</h4>
-                </div>
-                <p class="psl-desc">
-                  手繪沙漠角色世界觀與原創閱讀品牌；同人誌書衣手繪插畫繪製與特別設計帶有貓頭鷹特徵的標準字印刷完稿。
-                </p>
-                <div class="psl-images-2">
-                  <img src="assets/images/work/owl_cover.webp" alt="同人誌封面">
-                  <img src="assets/images/work/owl_typography.webp" alt="標準字設計">
-                </div>
-              </div>
-
-              <!-- 專案 5：亞提斯畢冊印前完稿 -->
-              <div class="psl-card">
-                <div class="psl-head">
-                  <span class="psl-tag">書籍排版 · 大量印前完稿實務</span>
-                  <h4 class="psl-title">亞提斯多媒體 · 畢業紀念冊編排完稿</h4>
-                </div>
-                <p class="psl-desc">
-                  在職期間獨立負責多所高中職畢業紀念冊視覺編排、各處室照片版型整理與大量色彩管理、印前轉外框完稿交付。
-                </p>
-                <div class="psl-images-2">
-                  <img src="assets/images/work/artis_資產_1.webp" alt="畢冊版面 1">
-                  <img src="assets/images/work/artis_資產_2.webp" alt="畢冊版面 2">
-                </div>
-              </div>
-            </div>
           </div>
 
           <footer class="sheet-footer">
@@ -545,17 +522,17 @@
           </footer>
         </article>
 
-        <!-- ==================== SHEET 6: 作品集 3 (活動文宣與空間導引) ==================== -->
+        <!-- ==================== SHEET 6: 作品集 3 (品牌活動年會視覺與原創出版) ==================== -->
         <article class="sheet" id="sheet-6" data-sheet="6">
           <header class="sheet-header">
             <div class="sh-left">
-              <b>${m.name} ｜ 作品集精選 · 品牌視覺、活動年會與空間導引</b>
+              <b>${m.name} ｜ 作品集精選 · 品牌年會視覺與原創設計</b>
             </div>
-            <div class="sh-right">PAGE 06 / 07</div>
+            <div class="sh-right">PAGE 06 / 08</div>
           </header>
 
           <div class="portfolio-sheet-content">
-            <!-- 專案 6：DevFest 高雄 & KotlinConf 年會視覺 -->
+            <!-- 專案 4：DevFest 高雄 & KotlinConf 年會視覺（2 欄大圖） -->
             <div class="p-feature-showcase">
               <div class="pfs-header">
                 <h3>
@@ -567,7 +544,7 @@
               <p class="pfs-desc">
                 結合高雄在地地標與科技社群特色，設計年會主視覺、社群圖卡與簡報版型；同時負責線上直播年會視覺，包含 YouTube Live 直播主畫面、紀念周邊與贊助商介紹社群文宣。
               </p>
-              <div class="showcase-strip-3">
+              <div class="showcase-grid-2">
                 <div class="ss-item">
                   <img src="assets/images/work/devfest_01.webp" alt="DevFest 高雄主視覺">
                   <span>DevFest 高雄 · 年會主視覺</span>
@@ -576,43 +553,29 @@
                   <img src="assets/images/work/kotlin_fb.webp" alt="KotlinConf 直播視覺">
                   <span>KotlinConf · 直播介面與圖卡</span>
                 </div>
-                <div class="ss-item">
-                  <img src="assets/images/work/kotlin_sponsor.webp" alt="贊助商社群圖卡">
-                  <span>贊助商介紹 · 社群貼文視覺</span>
-                </div>
               </div>
             </div>
 
-            <!-- 專案 7 & 8 雙欄大圖滿版 -->
-            <div class="projects-split-large">
-              <!-- 專案 7：四季眠 接案文宣 -->
-              <div class="psl-card">
-                <div class="psl-head">
-                  <span class="psl-tag">外接設計案 · 社群宣傳 · 空間指標</span>
-                  <h4 class="psl-title">四季眠 · 品牌宣傳與產品圖解說明</h4>
-                </div>
-                <p class="psl-desc">
-                  接案合作。協助床墊品牌規劃 120 天試睡圖示、節慶促銷貼文、實體門市招牌與床墊結構圖解。
-                </p>
-                <div class="psl-images-3">
-                  <img src="assets/images/work/sijimian_fb.webp" alt="促銷貼文">
-                  <img src="assets/images/work/sijimian_sleep.webp" alt="試睡圖解">
-                  <img src="assets/images/work/sijimian_sign.webp" alt="門市招牌">
-                </div>
+            <!-- 專案 5：渺渺品牌 & 貓頭鷹同人誌封面字體（2 欄大圖） -->
+            <div class="p-feature-showcase">
+              <div class="pfs-header">
+                <h3>
+                  渺渺品牌概念 &amp; 小貓頭鷹同人誌封面字體
+                  <span class="pfs-tag">原創插畫 · 標準字設計 · 裝幀完稿</span>
+                </h3>
+                <span class="pfs-metrics">原創角色世界觀 · 標準字設計</span>
               </div>
-
-              <!-- 專案 8：空間導引與商業櫥窗 -->
-              <div class="psl-card">
-                <div class="psl-head">
-                  <span class="psl-tag">宣導插畫 · 動線導引 · 櫥窗陳列</span>
-                  <h4 class="psl-title">友善工地圍籬導引 &amp; 商業櫥窗設計</h4>
+              <p class="pfs-desc">
+                親自手繪沙漠角色世界觀與原創閱讀品牌；同人誌書衣手繪插畫繪製與特別設計帶有貓頭鷹特徵的標準字印刷完稿。
+              </p>
+              <div class="showcase-grid-2">
+                <div class="ss-item">
+                  <img src="assets/images/work/owl_cover.webp" alt="同人誌封面">
+                  <span>同人誌封面 · 手繪插畫裝幀</span>
                 </div>
-                <p class="psl-desc">
-                  以親和溫暖的角色插畫簡化施工動線與安全宣導，降低民眾排斥感；參與商業走廊櫥窗立體裝置與陳列。
-                </p>
-                <div class="psl-images-2">
-                  <img src="assets/images/work/behavior_資產_2_2.webp" alt="友善圍籬導引">
-                  <img src="assets/images/work/interior_01.webp" alt="商業櫥窗空間">
+                <div class="ss-item">
+                  <img src="assets/images/work/owl_typography.webp" alt="標準字設計">
+                  <span>標準字設計 · 貓頭鷹造型特徵</span>
                 </div>
               </div>
             </div>
@@ -623,11 +586,96 @@
           </footer>
         </article>
 
-        <!-- ==================== SHEET 7: 封底 ==================== -->
-        <article class="sheet sheet-back-cover" id="sheet-7" data-sheet="7">
+        <!-- ==================== SHEET 7: 作品集 4 (畢冊書籍印前、四季眠圖解與空間陳列) ==================== -->
+        <article class="sheet" id="sheet-7" data-sheet="7">
+          <header class="sheet-header">
+            <div class="sh-left">
+              <b>${m.name} ｜ 作品集精選 · 印前完稿實務、商業圖解與空間導引</b>
+            </div>
+            <div class="sh-right">PAGE 07 / 08</div>
+          </header>
+
+          <div class="portfolio-sheet-content">
+            <!-- 專案 6：亞提斯畢冊印前完稿（2 欄大圖） -->
+            <div class="p-feature-showcase">
+              <div class="pfs-header">
+                <h3>
+                  亞提斯多媒體 · 畢業紀念冊編排完稿
+                  <span class="pfs-tag">書籍排版 · 大量印前完稿實務</span>
+                </h3>
+                <span class="pfs-metrics">多校畢冊交付 · 色彩管理</span>
+              </div>
+              <p class="pfs-desc">
+                在職期間獨立負責多所高中職畢業紀念冊視覺編排、各處室照片版型整理與大量色彩管理、印前轉外框完稿交付。
+              </p>
+              <div class="showcase-grid-2">
+                <div class="ss-item">
+                  <img src="assets/images/work/artis_資產_1.webp" alt="畢冊版面 1">
+                  <span>畢冊版面排版 · 班級跨頁</span>
+                </div>
+                <div class="ss-item">
+                  <img src="assets/images/work/artis_資產_2.webp" alt="畢冊版面 2">
+                  <span>校園活動版面 · 網格系統</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 專案 7 & 8 雙專案並列（大圖呈現，無大片留白） -->
+            <div class="projects-split-large">
+              <!-- 專案 7：四季眠 接案文宣 -->
+              <div class="psl-card">
+                <div class="psl-head">
+                  <span class="psl-tag">外接設計案 · 社群宣傳</span>
+                  <h4 class="psl-title">四季眠 · 品牌宣傳與圖解</h4>
+                </div>
+                <p class="psl-desc">
+                  接案合作。協助床墊品牌規劃 120 天試睡圖示、促銷貼文、門市招牌與床墊結構圖解。
+                </p>
+                <div class="showcase-grid-2">
+                  <div class="ss-item">
+                    <img src="assets/images/work/sijimian_fb.webp" alt="促銷貼文">
+                    <span>促銷社群貼文</span>
+                  </div>
+                  <div class="ss-item">
+                    <img src="assets/images/work/sijimian_sign.webp" alt="門市招牌">
+                    <span>門市實體招牌</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 專案 8：空間導引與商業櫥窗 -->
+              <div class="psl-card">
+                <div class="psl-head">
+                  <span class="psl-tag">宣導插畫 · 空間導引 · 櫥窗陳列</span>
+                  <h4 class="psl-title">友善圍籬導引 &amp; 櫥窗設計</h4>
+                </div>
+                <p class="psl-desc">
+                  以親和溫暖的角色插畫簡化施工動線與安全宣導；參與商業走廊櫥窗立體裝置與陳列。
+                </p>
+                <div class="showcase-grid-2">
+                  <div class="ss-item">
+                    <img src="assets/images/work/behavior_資產_2_2.webp" alt="友善圍籬導引">
+                    <span>施工動線安全導引</span>
+                  </div>
+                  <div class="ss-item">
+                    <img src="assets/images/work/interior_01.webp" alt="商業櫥窗空間">
+                    <span>商業走廊櫥窗陳列</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <footer class="sheet-footer">
+            <span class="sf-badge">作品集 ｜ P. 07</span>
+          </footer>
+        </article>
+
+        <!-- ==================== SHEET 8: 封底 ==================== -->
+        <article class="sheet sheet-back-cover" id="sheet-8" data-sheet="8">
           <div class="back-cover-head">
             <div class="bch-left">RÉSUMÉ &amp; PORTFOLIO</div>
-            <div class="bch-right">PAGE 07 / 07</div>
+            <div class="bch-right">PAGE 08 / 08</div>
           </div>
 
           <div class="back-hero">
@@ -635,7 +683,7 @@
             <div class="sub-lead">感謝您的撥冗閱讀</div>
             <p>
               專注把事情踏實做到位。<br>
-              具備能直接落地的視覺設計手感、真實面對客戶的溝通實戰，以及善用 Python 與 AI 工具理清混亂的工作方法。<br>
+              具備能直接落地的視覺設計手感、真實面對客戶的溝通實戰，以及善用 Python 與工具理清混亂的工作方法。<br>
               期待有機會與貴團隊合作，共同解決具體問題、創造實質價值！
             </p>
           </div>
@@ -648,7 +696,7 @@
               <div class="bcc-details">
                 <div><b>電話</b> <span>${m.phone || '0970-705-525'}</span></div>
                 <div><b>Email</b> <span>${m.email}</span></div>
-                <div><b>線上版</b> <span>saki949.github.io/2026_portfolio</span></div>
+                <div><b>作品連結</b> <span>saki949.github.io/2026_portfolio</span></div>
               </div>
             </div>
             <div class="bcc-qr">
@@ -662,7 +710,7 @@
           </div>
 
           <footer class="sheet-footer" style="border-top:none; margin-top:0; padding-top:0;">
-            <span class="sf-badge">封底 ｜ P. 07</span>
+            <span class="sf-badge">封底 ｜ P. 08</span>
           </footer>
         </article>
         `;
@@ -691,10 +739,34 @@
           : "📖 對開預覽";
       });
 
+      /* 支援直接點擊右上角編輯內容 */
+      let isEditing = false;
+      const editBookletBtn = document.getElementById("editBookletBtn");
+      editBookletBtn.addEventListener("click", () => {
+        isEditing = !isEditing;
+        document.body.classList.toggle("booklet-editing", isEditing);
+        editBookletBtn.textContent = isEditing ? "✓ 完成編輯" : "✏️ 編輯內容";
+        editBookletBtn.style.background = isEditing ? "var(--accent-2)" : "";
+        editBookletBtn.style.borderColor = isEditing ? "var(--accent-2)" : "";
+        
+        const editableTargets = document.querySelectorAll(".sheet h1, .sheet h2, .sheet h3, .sheet h4, .sheet p, .sheet li, .sheet span:not(.sf-badge), .sheet .cover-stat-label, .sheet .cover-stat-num");
+        editableTargets.forEach(el => {
+          if (isEditing) {
+            el.setAttribute("contenteditable", "plaintext-only");
+            el.setAttribute("spellcheck", "false");
+          } else {
+            el.removeAttribute("contenteditable");
+          }
+        });
+      });
+
       function updatePageNumbers() {
         const sheets = Array.from(document.querySelectorAll(".sheet:not(.hide-sheet)"));
         const total = sheets.length;
         const totalStr = String(total).padStart(2, "0");
+        const countBadge = document.getElementById("sheetCountBadge");
+        if (countBadge) countBadge.textContent = `${total} 頁滿版裝訂冊`;
+
         sheets.forEach((sheet, idx) => {
           const currentStr = String(idx + 1).padStart(2, "0");
           const shRight = sheet.querySelector(".sh-right");
@@ -724,7 +796,7 @@
 
       const toggleBackCover = document.getElementById("toggleBackCover");
       toggleBackCover.addEventListener("change", (e) => {
-        const backCover = document.getElementById("sheet-7");
+        const backCover = document.getElementById("sheet-8") || document.querySelector(".sheet-back-cover");
         if (backCover) backCover.classList.toggle("hide-sheet", !e.target.checked);
         updatePageNumbers();
       });
