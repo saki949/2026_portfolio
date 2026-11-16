@@ -1,4 +1,4 @@
-const CACHE_NAME = 'resume-portfolio-cache-v13';
+const CACHE_NAME = 'resume-portfolio-cache-v14';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

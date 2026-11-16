@@ -6,7 +6,7 @@ window.SITE_DEFAULT = {
     role: "行銷企劃",
     tagline: "商業洞察 · 第一線客戶開發 · 視覺設計 · 流程自動化",
     email: "tracepk62@gmail.com",
-    phone: "0970-705-525",
+    phone: "",
     onlineUrl: "https://saki949.github.io/2026_portfolio/",
     photo: "assets/images/photo01.webp",
     photoAlt: "黃于玲 個人照"
