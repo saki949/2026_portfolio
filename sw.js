@@ -1,10 +1,12 @@
-const CACHE_NAME = 'resume-portfolio-cache-v8';
+const CACHE_NAME = 'resume-portfolio-cache-v12';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './portfolio.html',
+  './print.html',
   './assets/css/site.css',
   './assets/css/portfolio.css',
+  './assets/css/print-booklet.css',
   './assets/js/content.js',
   './assets/js/qrcode.js',
   './assets/js/editor.js',
@@ -96,15 +98,40 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url);
+  // 對 HTML, CSS, JS 等程式檔案優先使用 Network-First，以確保修改後立即生效
+  const isCodeAsset = url.pathname.endsWith('.html') ||
+                      url.pathname.endsWith('.js') ||
+                      url.pathname.endsWith('.css') ||
+                      url.pathname === '/' ||
+                      url.pathname.endsWith('/');
+
+  if (isCodeAsset) {
+    event.respondWith(
+      fetch(event.request).then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const clone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+        }
+        return networkResponse;
+      }).catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
+  // 圖片等靜態資產使用 Cache-First
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
         return cachedResponse;
       }
       return fetch(event.request).then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const clone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+        }
         return networkResponse;
       }).catch(() => {
-        // 離線回退
         return caches.match('./index.html');
       });
     })

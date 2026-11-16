@@ -66,6 +66,8 @@
       <nav class="topnav" aria-label="頁面切換">
         <a href="index.html">履歷</a>
         <a href="portfolio.html" aria-current="page">作品集</a>
+        <a href="print.html" class="nav-print-tag" title="A4直式實體冊列印預覽">📄 列印實體冊 (A4)</a>
+        <button type="button" class="nav-edit-btn" id="navEditBtn" data-eb="toggle" aria-pressed="false" title="點擊直接修改頁面文字">✏️ 編輯內容</button>
       </nav>
 
       <header class="hero">

@@ -80,7 +80,12 @@
       </div>`).join("");
 
     const edu = d.education.map((e, i) => `
-      <li>${t("p", `education.${i}.title`, e.title, "strong")}${t("p", `education.${i}.period`, e.period, "muted")}${ctrl("education", i)}</li>`).join("");
+      <li>
+        ${t("p", `education.${i}.title`, e.title, "strong")}
+        ${e.desc ? t("p", `education.${i}.desc`, e.desc, "edu-desc") : ""}
+        ${t("p", `education.${i}.period`, e.period, "muted")}
+        ${ctrl("education", i)}
+      </li>`).join("");
 
     const certs = d.certs.map((c, i) => `<li>${t("span", `certs.${i}`, c)}${ctrl("certs", i, { move: false })}</li>`).join("");
 
@@ -88,6 +93,8 @@
       <nav class="topnav" aria-label="頁面切換">
         <a href="index.html" aria-current="page">履歷</a>
         <a href="portfolio.html">作品集</a>
+        <a href="print.html" class="nav-print-tag" title="A4直式實體冊列印預覽">📄 列印實體冊 (A4)</a>
+        <button type="button" class="nav-edit-btn" id="navEditBtn" data-eb="toggle" aria-pressed="false" title="點擊直接修改頁面文字">✏️ 編輯內容</button>
       </nav>
 
       <header class="hero">
@@ -105,8 +112,9 @@
         </div>
         <div class="hero-contact">
           <dl>
+            ${m.phone ? `<div><dt>電話</dt><dd><a href="tel:${esc(m.phone)}" data-path="meta.phone">${esc(m.phone)}</a></dd></div>` : ""}
             <div><dt>Email</dt><dd><a href="mailto:${esc(m.email)}" data-path="meta.email">${esc(m.email)}</a></dd></div>
-            <div><dt>地區</dt><dd>${t("span", "meta.location", m.location)}</dd></div>
+            ${m.onlineUrl ? `<div><dt>作品集</dt><dd><a href="${esc(m.onlineUrl)}" target="_blank" rel="noopener">線上連結</a></dd></div>` : ""}
           </dl>
         </div>
       </header>

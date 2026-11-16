@@ -4,7 +4,8 @@
   "use strict";
 
   const params = new URLSearchParams(location.search);
-  const EDIT_AVAILABLE = params.has("edit");
+  // 右上角隨時提供「編輯內容」按鈕，讓本人或瀏覽者可直接點擊進入編輯模式
+  const EDIT_AVAILABLE = true;
   const KEY = "resume-site-draft-v2";
 
   const clone = (o) => JSON.parse(JSON.stringify(o));
@@ -123,26 +124,30 @@
       bar.setAttribute("role", "toolbar");
       bar.setAttribute("aria-label", "編輯工具");
       bar.innerHTML = `
-        <button type="button" class="eb-main" data-eb="toggle" aria-pressed="false">編輯</button>
+        <button type="button" class="eb-main" data-eb="toggle" aria-pressed="false">✏️ 編輯內容</button>
         <div class="eb-tools" hidden>
-          <button type="button" data-eb="undo" aria-label="復原">↶</button>
-          <button type="button" data-eb="redo" aria-label="重做">↷</button>
+          <button type="button" data-eb="undo" aria-label="復原">↶ 復原</button>
+          <button type="button" data-eb="redo" aria-label="重做">↷ 重做</button>
           <label class="eb-color">主色<input type="color" data-eb="accent"></label>
           <label class="eb-color">輔色<input type="color" data-eb="accent2"></label>
-          <button type="button" data-eb="mode">深色</button>
-          <button type="button" data-eb="export">匯出</button>
-          <button type="button" data-eb="print">列印</button>
-          <button type="button" data-eb="reset">重設</button>
+          <button type="button" data-eb="mode">切換深淺</button>
+          <button type="button" data-eb="export">💾 匯出 content.js</button>
+          <button type="button" data-eb="print">🖨️ 列印</button>
+          <button type="button" data-eb="reset">重設草稿</button>
         </div>
-        <p class="eb-note" hidden>草稿僅存在這台裝置。要公開請按「匯出」後取代 content.js。</p>`;
+        <p class="eb-note" hidden>草稿會自動存在您的這台瀏覽器。修改完成後點擊「匯出 content.js」覆蓋檔案即可永久生效。</p>`;
       document.body.appendChild(bar);
       this.bar = bar;
 
-      bar.addEventListener("click", (e) => {
+      document.addEventListener("click", (e) => {
         const b = e.target.closest("[data-eb]");
         if (!b) return;
         const act = b.dataset.eb;
-        if (act === "toggle") this.setEditing(!this.editing);
+        if (act === "toggle") {
+          e.preventDefault();
+          this.setEditing(!this.editing);
+          return;
+        }
         if (act === "undo") this.undo();
         if (act === "redo") this.redo();
         if (act === "mode") this.mutate((d) => { d.theme.mode = d.theme.mode === "dark" ? "light" : "dark"; });
@@ -153,7 +158,7 @@
           location.reload();
         }
       });
-      bar.addEventListener("input", (e) => {
+      document.addEventListener("input", (e) => {
         const b = e.target.closest("[data-eb]");
         if (!b) return;
         if (b.dataset.eb === "accent" || b.dataset.eb === "accent2") {
@@ -222,13 +227,17 @@
 
     setEditing(on) {
       this.editing = on;
-      this.bar.querySelector(".eb-tools").hidden = !on;
-      this.bar.querySelector(".eb-note").hidden = !on;
-      const main = this.bar.querySelector(".eb-main");
-      main.textContent = on ? "完成" : "編輯";
-      main.setAttribute("aria-pressed", String(on));
+      if (this.bar) {
+        this.bar.querySelector(".eb-tools").hidden = !on;
+        this.bar.querySelector(".eb-note").hidden = !on;
+      }
+      document.querySelectorAll('[data-eb="toggle"]').forEach((btn) => {
+        btn.textContent = on ? "✓ 完成編輯" : "✏️ 編輯內容";
+        btn.setAttribute("aria-pressed", String(on));
+        btn.classList.toggle("is-active", on);
+      });
       this.render();
-      this.syncColorInputs();
+      if (this.bar) this.syncColorInputs();
     },
 
     syncColorInputs() {
@@ -260,7 +269,13 @@
 
   /* 渲染模組共用的小工具 */
   Site.h = {
-    esc: (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])),
+    esc: (s) => String(s == null ? "" : s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;")
+      .replace(/&lt;br\s*\/?&gt;/gi, "<br>"),
     /* 可編輯文字節點 */
     t(tag, path, value, cls) {
       return `<${tag}${cls ? ` class="${cls}"` : ""} data-path="${path}">${Site.h.esc(value)}</${tag}>`;

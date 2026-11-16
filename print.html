@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>黃于玲｜個人履歷與作品集</title>
+  <meta name="description" content="黃于玲 A4 直式實體履歷與作品集，支援一鍵列印與另存為 PDF。">
+  <link rel="stylesheet" href="assets/css/print-booklet.css?v=3">
+</head>
+<body class="preview-screen">
+
+  <!-- 頂部操作列（純螢幕顯示，列印時自動隱藏） -->
+  <header class="print-toolbar no-print">
+    <div class="pt-group">
+      <div class="pt-title">
+        📄 A4 直式個人履歷與作品集
+        <span>7 頁滿版裝訂冊</span>
+      </div>
+    </div>
+
+    <div class="pt-group">
+      <label class="pt-label" title="切換封面印出狀態">
+        <input type="checkbox" id="toggleCover" checked> 包含封面
+      </label>
+      <label class="pt-label" title="切換封底印出狀態">
+        <input type="checkbox" id="toggleBackCover" checked> 包含封底
+      </label>
+      <button type="button" class="pt-btn" id="togglePhotoBtn" title="切換工作照 / 休閒照">
+        📷 切換照片
+      </button>
+      <button type="button" class="pt-btn" id="toggleSpreadBtn" title="切換單頁 / 雙頁對開螢幕預覽">
+        📖 對開預覽
+      </button>
+      <button type="button" class="pt-btn primary" id="printBtn" title="立即呼叫系統列印或儲存為 PDF">
+        🖨️ 一鍵列印 / 存為 PDF
+      </button>
+    </div>
+
+    <div class="pt-group">
+      <a href="index.html" class="pt-btn">← 回線上履歷</a>
+      <a href="portfolio.html" class="pt-btn">← 回作品集</a>
+    </div>
+  </header>
+
+  <!-- 列印設定提示（列印時自動隱藏） -->
+  <div class="pt-tip-bar no-print">
+    💡 <b>列印提示：</b>列印時請將【目的地】設為「另存為 PDF」或印表機，【邊界】設為「<b>無</b>」或「<b>預設</b>」，並勾選「<b>背景圖形</b>（Background graphics）」。
+  </div>
+
+  <!-- A4 紙張本體容器 -->
+  <main class="booklet-container" id="bookletApp">
+    <!-- 各頁內容由 JavaScript 動態渲染 -->
+  </main>
+
+  <script src="assets/js/content.js?v=9"></script>
+  <script src="assets/js/qrcode.js?v=9"></script>
+  <script>
+    (function () {
+      "use strict";
+
+      let d = window.SITE_DEFAULT;
+      try {
+        const saved = localStorage.getItem("resume-site-draft-v2");
+        if (saved) {
+          d = Object.assign({}, window.SITE_DEFAULT, JSON.parse(saved));
+        }
+      } catch (e) {}
+
+      const m = d.meta;
+      const f = d.featured;
+      let activePhoto = m.photo || "assets/images/photo01.webp";
+
+      function getQrSvg(url, size) {
+        try {
+          const qr = qrcode(0, "M");
+          qr.addData(url || m.onlineUrl || "https://saki949.github.io/2026_portfolio/");
+          qr.make();
+          return qr.createSvgTag({ cellSize: size || 4, margin: 0, scalable: true });
+        } catch (e) {
+          return '<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#eee"/></svg>';
+        }
+      }
+
+      const qrSvgCode = getQrSvg(m.onlineUrl || "https://saki949.github.io/2026_portfolio/", 4);
+      const app = document.getElementById("bookletApp");
+
+      function renderBooklet() {
+        app.innerHTML = `
+        <!-- ==================== SHEET 1: 封面 ==================== -->
+        <article class="sheet sheet-cover" id="sheet-1" data-sheet="1">
+          <div class="cover-top-bar">
+            <div>
+              <div class="cover-label">RÉSUMÉ &amp; PORTFOLIO</div>
+            </div>
+            <div class="cover-year">2026</div>
+          </div>
+
+          <div class="cover-hero">
+            <div class="cover-name-block">
+              <h1>${m.name}</h1>
+              <div class="cover-sub-intro">個人履歷與作品集</div>
+              <div class="cover-core-desc">
+                師大設計系畢業，具備 8–9 年跨領域實戰經驗。<br>
+                擅長動手解決具體問題：獨立視覺排版與印前完稿、第一線客群需求開拓，以及運用 Python 與 AI 梳理混亂資料、自動化繁瑣流程，專注把事情踏實做到位。
+              </div>
+            </div>
+            <div class="cover-photo-box">
+              <img src="${activePhoto}" alt="${m.name}" id="coverPhotoImg">
+            </div>
+          </div>
+
+          <!-- 5 大核心指標 -->
+          <div class="cover-stats-row">
+            ${d.stats.map(s => `
+              <div class="cover-stat-item">
+                <div class="cover-stat-num">${s.num}<i>${s.unit}</i></div>
+                <div class="cover-stat-label">${s.label}</div>
+              </div>
+            `).join("")}
+          </div>
+
+          <!-- 3 大特質卡片（真實自我與核心能力） -->
+          <div class="cover-pillars">
+            <div class="cover-pillar-card">
+              <div class="cpc-num">01</div>
+              <h3>動手解決具體問題</h3>
+              <p>不論是把抽象概念畫出來、寫腳本把繁瑣流程變快，還是面對面搞懂客戶要什麼，擅長把事情從無到有搞定。</p>
+            </div>
+            <div class="cover-pillar-card">
+              <div class="cpc-num">02</div>
+              <h3>找到未被注意的切入點</h3>
+              <p>在群富跳脫常規咖啡廳削價競爭，開拓企業伴手禮、婚禮小物與商務名片濾掛等新藍海，累積 300+ 家客戶與 90%+ 成交率。</p>
+            </div>
+            <div class="cover-pillar-card">
+              <div class="cpc-num">03</div>
+              <h3>善用工具把混亂理出頭緒</h3>
+              <p>自己撰寫業務邏輯規則，運用 AI 作為 Copilot 編寫 Python 自動化腳本；建立專案知識庫輔助策略分析與客群疑慮演練。</p>
+            </div>
+          </div>
+
+          <!-- 封面底部資訊與 QR Code -->
+          <div class="cover-bottom">
+            <div class="cover-contacts">
+              <div><b>聯絡電話</b><span>${m.phone || '0970-705-525'}</span></div>
+              <div><b>電子信箱</b><span>${m.email || 'tracepk62@gmail.com'}</span></div>
+              <div><b>學歷背景</b><span>國立臺灣師範大學 設計學系 學士</span></div>
+              <div><b>作品連結</b><span>https://saki949.github.io/2026_portfolio/</span></div>
+            </div>
+            <div class="cover-qrcode-box">
+              <div class="cover-qrcode-svg">${qrSvgCode}</div>
+              <span>電子版履歷.作品集</span>
+            </div>
+          </div>
+
+          <footer class="sheet-footer" style="border-top:none; margin-top:0; padding-top:0;">
+            <span class="sf-badge">封面 ｜ P. 01</span>
+          </footer>
+        </article>
+
+        <!-- ==================== SHEET 2: 履歷篇 1 ==================== -->
+        <article class="sheet" id="sheet-2" data-sheet="2">
+          <header class="sheet-header">
+            <div class="sh-left">
+              <b>${m.name} ｜ 個人簡介與工作歷程</b>
+            </div>
+            <div class="sh-right">PAGE 02 / 07</div>
+          </header>
+
+          <div class="sheet-body">
+            <!-- 個人簡介 -->
+            <section class="p-sec">
+              <div class="sec-title"><span>ABOUT ME</span>個人簡介</div>
+              <p class="intro-lead">
+                具備 8–9 年實務經驗，橫跨產品推廣、第一線業務、平面設計與流程自動化。重視資料的準確度、產品能否切中市場被買單、客戶是否滿意。習慣先搞清楚現況限制與目標受眾，動手把事情解決，是一個能把混亂理出頭緒、踏實把事情做到位的實戰型夥伴。
+              </p>
+              <div class="strengths-grid">
+                <div class="strength-card">
+                  <span class="idx">01</span>
+                  <h4>動手解決問題</h4>
+                  <p>不管是視覺編排、寫 Python 解決繁瑣資料，還是面對客戶搞懂真實需求，能獨立從無到有搞定。</p>
+                </div>
+                <div class="strength-card">
+                  <span class="idx">02</span>
+                  <h4>新客群開拓力</h4>
+                  <p>不搶人擠人的紅海，擅長發掘潛在需求（如婚禮客製、商務名片濾掛），轉化為高成交率訂單。</p>
+                </div>
+                <div class="strength-card">
+                  <span class="idx">03</span>
+                  <h4>善用工具理清混亂</h4>
+                  <p>結合 Python 腳本與 AI 工具自動化處理大量文件與資料，縮減重複勞務，讓執行更敏捷準確。</p>
+                </div>
+              </div>
+            </section>
+
+            <!-- 工作歷程（群富置頂，接駿業與永達） -->
+            <section class="p-sec">
+              <div class="sec-title"><span>EXPERIENCE</span>工作歷程</div>
+              <div class="jobs-list-unified">
+                <!-- 經歷 1：群富包裝（移回歷程並置頂） -->
+                <div class="job-card-unified featured-top">
+                  <div class="jcu-head">
+                    <div class="title-part">
+                      <h4>${f.company}</h4>
+                      <span class="role">${f.role}</span>
+                    </div>
+                    <span class="period">${f.period}</span>
+                  </div>
+                  <div class="jcu-highlight">
+                    ★ <b>實際成果：</b>2 年內開發 300+ 家企業客戶，成交率 90% 以上，與老闆共同推動從小巷工廠遷至近千坪廠房、擴編 5 位夥伴。
+                  </div>
+                  <ul class="jcu-bullets">
+                    <li><b>從小巷工廠到千坪廠房：</b>以美工協助印前檔案加入，看見營運問題主動改善，逐步承接客群開發與服務，攜手將家庭式小廠拓展至近千坪新廠房與團隊擴編。</li>
+                    <li><b>名片濾掛（在生活裡爭取曝光）：</b>注意到房仲、車商與候選人名片容易被隨手丟掉，主動先將名片打樣成濾掛樣品上門提案，解決名片留存率低的痛點，開闢新客群。</li>
+                    <li><b>展場主動出擊開發：</b>參加茶酒咖啡展不只接待過路訪客，更主動走訪同場其他參展廠商，挖掘跨界包裝與企業伴手禮需求，達成 90% 以上成交率。</li>
+                  </ul>
+                </div>
+
+                <!-- 經歷 2：駿業檔案系統 -->
+                <div class="job-card-unified">
+                  <div class="jcu-head">
+                    <div class="title-part">
+                      <h4>駿業檔案系統股份有限公司</h4>
+                      <span class="role">公部門專案人員（Python / 流程優化）</span>
+                    </div>
+                    <span class="period">2026/05 – 2026/07</span>
+                  </div>
+                  <ul class="jcu-bullets">
+                    <li>支援市議會檔案梳理短期專案。因公部門系統封閉無法直接串接外部工具，自行編寫 Python 結合螢幕文字辨識（OCR）與自動化標記異常資料。</li>
+                    <li>省下超過一半的逐筆人工審核時間，讓團隊能專注在需要專業判斷的內容調整；任務完成後順利交接。</li>
+                  </ul>
+                </div>
+
+                <!-- 經歷 3：永達保險經紀人 -->
+                <div class="job-card-unified">
+                  <div class="jcu-head">
+                    <div class="title-part">
+                      <h4>永達保險經紀人股份有限公司</h4>
+                      <span class="role">業務專員</span>
+                    </div>
+                    <span class="period">2022/04 – 2026/01</span>
+                  </div>
+                  <ul class="jcu-bullets">
+                    <li>從零陌生開發並經營 250+ 位客戶（件均年繳約 10 萬、最高 180 萬），體會到保險只是工具，做的是理解人的工作。</li>
+                    <li>擅長辨識反對問題背後的原因：當客戶提及投資報酬率，能聽懂對方背後對未來生活與風險的擔憂，把複雜的財經與稅務資訊轉化為對方聽得懂的安心提案。</li>
+                    <li>參與團隊每季營銷策略規劃，消化總經趨勢轉譯為客戶關注的痛點，建立高黏著度與口碑轉介紹。</li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <footer class="sheet-footer">
+            <span class="sf-badge">履歷 ｜ P. 02</span>
+          </footer>
+        </article>
+
+        <!-- ==================== SHEET 3: 履歷篇 2 ==================== -->
+        <article class="sheet" id="sheet-3" data-sheet="3">
+          <header class="sheet-header">
+            <div class="sh-left">
+              <b>${m.name} ｜ 工作歷程延續與核心技能</b>
+            </div>
+            <div class="sh-right">PAGE 03 / 07</div>
+          </header>
+
+          <div class="sheet-body">
+            <!-- 經歷延續 -->
+            <section class="p-sec">
+              <div class="sec-title"><span>EXPERIENCE CONTINUED</span>工作歷程延續</div>
+              <div class="jobs-list-unified">
+                <!-- 經歷 4：亞提斯多媒體 -->
+                <div class="job-card-unified">
+                  <div class="jcu-head">
+                    <div class="title-part">
+                      <h4>亞提斯多媒體有限公司</h4>
+                      <span class="role">平面設計／美編</span>
+                    </div>
+                    <span class="period">2019/03 – 2019/10</span>
+                  </div>
+                  <ul class="jcu-bullets">
+                    <li>獨立負責多所高中職畢業紀念冊視覺編排、各處室照片版型整理與大量印前轉外框完稿。</li>
+                    <li>規劃各類品牌文宣、活動邀請卡與周邊贈品之視覺構成與印刷色彩管理。</li>
+                  </ul>
+                </div>
+
+                <!-- 經歷 5：兆田精密工業 -->
+                <div class="job-card-unified">
+                  <div class="jcu-head">
+                    <div class="title-part">
+                      <h4>兆田精密工業股份有限公司</h4>
+                      <span class="role">平面設計與海外展務實習生</span>
+                    </div>
+                    <span class="period">2016/03 – 2018/07</span>
+                  </div>
+                  <ul class="jcu-bullets">
+                    <li>代表公司前往台北與德國等 6 場國際專業展，以流利英文向海外買主進行單車配件產品演示與品牌推廣。</li>
+                    <li>第一線蒐集海外市場反饋並轉譯給內部工程研發團隊；獨立負責商品實體攝影、雙語外銷型錄與展場主視覺設計。</li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+
+            <!-- 核心專業技能（真實能力，不膨風） -->
+            <section class="p-sec">
+              <div class="sec-title"><span>SKILLS &amp; TOOLS</span>核心能力與工具</div>
+              <div class="skills-quad">
+                <div class="skill-block">
+                  <h4>視覺設計與印刷實務</h4>
+                  <div class="skill-pills">
+                    <span class="skill-pill">Illustrator</span>
+                    <span class="skill-pill">Photoshop</span>
+                    <span class="skill-pill">InDesign</span>
+                    <span class="skill-pill">Canva</span>
+                    <span class="skill-pill">包裝打樣與印前完稿</span>
+                    <span class="skill-pill">手繪插畫</span>
+                  </div>
+                </div>
+
+                <div class="skill-block">
+                  <h4>Python 自動化與資料處理</h4>
+                  <div class="skill-pills">
+                    <span class="skill-pill">Python 資料清洗腳本</span>
+                    <span class="skill-pill">自動化批次處理</span>
+                    <span class="skill-pill">社群輿情觀測</span>
+                    <span class="skill-pill">Excel 數據整理</span>
+                  </div>
+                </div>
+
+                <div class="skill-block">
+                  <h4>AI 工具實務整合</h4>
+                  <div class="skill-pills">
+                    <span class="skill-pill">專案知識庫建置 (Custom GPTs / Projects)</span>
+                    <span class="skill-pill">客群疑慮演練與策略輔助</span>
+                    <span class="skill-pill">AI Copilot 程式輔助</span>
+                    <span class="skill-pill">Midjourney / Firefly 視覺發想</span>
+                  </div>
+                </div>
+
+                <div class="skill-block">
+                  <h4>商業溝通與跨部門協調</h4>
+                  <div class="skill-pills">
+                    <span class="skill-pill">B2B / B2C 客戶開發 (90%+ 成交率)</span>
+                    <span class="skill-pill">海外國際展英文推廣</span>
+                    <span class="skill-pill">工程圖面閱讀 (AutoCAD / 3D)</span>
+                    <span class="skill-pill">廠商發包管理</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- 學歷與專業認證 -->
+            <section class="p-sec">
+              <div class="sec-title"><span>EDUCATION &amp; CERTIFICATES</span>學歷與專業證照</div>
+              <div class="edu-cert-row">
+                <div class="ec-box">
+                  <h4>國立臺灣師範大學 <span>2014/09 – 2018/06</span></h4>
+                  <p><b>設計學系 學士</b>（具備紮實美學構成、視覺傳達與印刷製程工法）</p>
+                </div>
+                <div class="ec-box">
+                  <h4>專業證照與語言 <span>CREDENTIALS</span></h4>
+                  <ul>
+                    ${d.certs.map(c => `<li>${c}</li>`).join("")}
+                  </ul>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <footer class="sheet-footer">
+            <span class="sf-badge">履歷 ｜ P. 03</span>
+          </footer>
+        </article>
+
+        <!-- ==================== SHEET 4: 作品集 1 (包裝與商業企劃) ==================== -->
+        <article class="sheet" id="sheet-4" data-sheet="4">
+          <header class="sheet-header">
+            <div class="sh-left">
+              <b>${m.name} ｜ 作品集精選 · 商業企劃與精品系列包裝</b>
+            </div>
+            <div class="sh-right">PAGE 04 / 07</div>
+          </header>
+
+          <div class="portfolio-sheet-content">
+            <!-- 專案 1：精品濾掛咖啡系列包裝與客製企劃 -->
+            <div class="p-feature-showcase">
+              <div class="pfs-header">
+                <h3>
+                  精品濾掛咖啡 · 系列包裝與客製企劃
+                  <span class="pfs-tag">包裝設計 · 產品企劃</span>
+                </h3>
+                <span class="pfs-metrics">300+ 企業客戶 · 成交率 90%+ · 帶動 500% 成長</span>
+              </div>
+              <p class="pfs-desc">
+                針對各產區風味繪製專屬手繪插畫，完成 18 款精品濾掛與 5 款大同高中校園客製包裝。跳脫傳統咖啡廳通路的削價競爭，從客製化切入新客群，帶動企業送禮與婚禮小物大量訂單，促成新廠房拓展。
+              </p>
+              <!-- 大圖滿版：8 款包裝矩陣 -->
+              <div class="packaging-gallery-large">
+                <div class="pg-item">
+                  <img src="assets/packaging/卡蘭索.webp" alt="卡蘭索">
+                  <span>卡蘭索 · 耶加雪菲</span>
+                </div>
+                <div class="pg-item">
+                  <img src="assets/packaging/蜜月花魁.webp" alt="蜜月花魁">
+                  <span>蜜月花魁 · 日曬</span>
+                </div>
+                <div class="pg-item">
+                  <img src="assets/packaging/莫札特.webp" alt="莫札特">
+                  <span>音樂家 · 莫札特</span>
+                </div>
+                <div class="pg-item">
+                  <img src="assets/packaging/米拉蘇.webp" alt="米拉蘇">
+                  <span>哥斯大黎加 · 米拉蘇</span>
+                </div>
+                <div class="pg-item">
+                  <img src="assets/packaging/班薩.webp" alt="班薩">
+                  <span>西達摩 · 班薩</span>
+                </div>
+                <div class="pg-item">
+                  <img src="assets/packaging/藍火山.webp" alt="藍火山">
+                  <span>瓜地馬拉 · 藍火山</span>
+                </div>
+                <div class="pg-item">
+                  <img src="assets/packaging/大同_大同道.webp" alt="大同道">
+                  <span>大同高中客製 · 大同道</span>
+                </div>
+                <div class="pg-item">
+                  <img src="assets/packaging/大同_孔子像.webp" alt="孔子像">
+                  <span>大同高中客製 · 孔子像</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 專案 2：尋味旅程品鑑活動與社群推廣 -->
+            <div class="p-feature-showcase">
+              <div class="pfs-header">
+                <h3>
+                  尋味旅程 · 咖啡品鑑活動與社群文宣
+                  <span class="pfs-tag">實體活動 · 展場 LINE 經營</span>
+                </h3>
+                <span class="pfs-metrics">展場會員招募 · 跨界結合</span>
+              </div>
+              <p class="pfs-desc">
+                展覽現場與門市招募 LINE 會員之文宣規劃，包含「尋味旅程」品鑑活動主海報、現場風味豆單設計，方便客人清楚理解風味並快速下單，並與其他展業跨界深度經營。
+              </p>
+              <div class="showcase-strip-3">
+                <div class="ss-item">
+                  <img src="assets/images/work/coffee_taste.webp" alt="品鑑海報">
+                  <span>尋味旅程 · 活動品鑑海報</span>
+                </div>
+                <div class="ss-item">
+                  <img src="assets/images/work/coffee_menu.webp" alt="現場風味豆單">
+                  <span>現場風味豆單 · 清晰分類</span>
+                </div>
+                <div class="ss-item">
+                  <img src="assets/images/work/line_menu.webp" alt="LINE 數位點單">
+                  <span>LINE 官方帳號 · 數位菜單導流</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <footer class="sheet-footer">
+            <span class="sf-badge">作品集 ｜ P. 04</span>
+          </footer>
+        </article>
+
+        <!-- ==================== SHEET 5: 作品集 2 (外銷型錄與書籍完稿) ==================== -->
+        <article class="sheet" id="sheet-5" data-sheet="5">
+          <header class="sheet-header">
+            <div class="sh-left">
+              <b>${m.name} ｜ 作品集精選 · 外銷型錄、印前完稿與品牌視覺</b>
+            </div>
+            <div class="sh-right">PAGE 05 / 07</div>
+          </header>
+
+          <div class="portfolio-sheet-content">
+            <!-- 專案 3：兆田精密外銷型錄 -->
+            <div class="p-feature-showcase">
+              <div class="pfs-header">
+                <h3>
+                  兆田精密工業 · 單車配件產品外銷型錄 (DM)
+                  <span class="pfs-tag">外銷型錄 · 排版設計 · 印前完稿</span>
+                </h3>
+                <span class="pfs-metrics">6 場國際展覽指定 · 雙語產品型錄</span>
+              </div>
+              <p class="pfs-desc">
+                負責外銷單車配件與手工具之型錄（2026 DM），整理上百項產品數據、實物攝影修圖、去背與雙語排版完稿，於台北與德國等 6 場國際大展提供海外買主迅速查閱規格下單。
+              </p>
+              <div class="showcase-strip-4">
+                <div class="ss-item">
+                  <img src="assets/images/work/zt_dm_01.webp" alt="DM 封面">
+                  <span>型錄封面 · 品牌形象</span>
+                </div>
+                <div class="ss-item">
+                  <img src="assets/images/work/zt_dm_02.webp" alt="工具規格頁">
+                  <span>手工具規格 · 雙語版面</span>
+                </div>
+                <div class="ss-item">
+                  <img src="assets/images/work/zt_dm_03.webp" alt="配件規格頁">
+                  <span>配件數據 · 圖文對照</span>
+                </div>
+                <div class="ss-item">
+                  <img src="assets/images/work/zt_dm_04.webp" alt="產品陣列頁">
+                  <span>產品陣列 · 系統化編排</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 專案 4 & 5 雙欄大圖滿版 -->
+            <div class="projects-split-large">
+              <!-- 專案 4：渺渺品牌 & 貓頭鷹同人誌 -->
+              <div class="psl-card">
+                <div class="psl-head">
+                  <span class="psl-tag">原創插畫 · 標準字設計 · 裝幀完稿</span>
+                  <h4 class="psl-title">渺渺品牌概念 &amp; 小貓頭鷹封面字體</h4>
+                </div>
+                <p class="psl-desc">
+                  手繪沙漠角色世界觀與原創閱讀品牌；同人誌書衣手繪插畫繪製與特別設計帶有貓頭鷹特徵的標準字印刷完稿。
+                </p>
+                <div class="psl-images-2">
+                  <img src="assets/images/work/owl_cover.webp" alt="同人誌封面">
+                  <img src="assets/images/work/owl_typography.webp" alt="標準字設計">
+                </div>
+              </div>
+
+              <!-- 專案 5：亞提斯畢冊印前完稿 -->
+              <div class="psl-card">
+                <div class="psl-head">
+                  <span class="psl-tag">書籍排版 · 大量印前完稿實務</span>
+                  <h4 class="psl-title">亞提斯多媒體 · 畢業紀念冊編排完稿</h4>
+                </div>
+                <p class="psl-desc">
+                  在職期間獨立負責多所高中職畢業紀念冊視覺編排、各處室照片版型整理與大量色彩管理、印前轉外框完稿交付。
+                </p>
+                <div class="psl-images-2">
+                  <img src="assets/images/work/artis_資產_1.webp" alt="畢冊版面 1">
+                  <img src="assets/images/work/artis_資產_2.webp" alt="畢冊版面 2">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <footer class="sheet-footer">
+            <span class="sf-badge">作品集 ｜ P. 05</span>
+          </footer>
+        </article>
+
+        <!-- ==================== SHEET 6: 作品集 3 (活動文宣與空間導引) ==================== -->
+        <article class="sheet" id="sheet-6" data-sheet="6">
+          <header class="sheet-header">
+            <div class="sh-left">
+              <b>${m.name} ｜ 作品集精選 · 品牌視覺、活動年會與空間導引</b>
+            </div>
+            <div class="sh-right">PAGE 06 / 07</div>
+          </header>
+
+          <div class="portfolio-sheet-content">
+            <!-- 專案 6：DevFest 高雄 & KotlinConf 年會視覺 -->
+            <div class="p-feature-showcase">
+              <div class="pfs-header">
+                <h3>
+                  GDG DevFest 高雄 &amp; KotlinConf Global 年會視覺
+                  <span class="pfs-tag">年會主視覺 · 直播圖卡物料</span>
+                </h3>
+                <span class="pfs-metrics">活動主視覺 · 直播介面 · 社群文宣</span>
+              </div>
+              <p class="pfs-desc">
+                結合高雄在地地標與科技社群特色，設計年會主視覺、社群圖卡與簡報版型；同時負責線上直播年會視覺，包含 YouTube Live 直播主畫面、紀念周邊與贊助商介紹社群文宣。
+              </p>
+              <div class="showcase-strip-3">
+                <div class="ss-item">
+                  <img src="assets/images/work/devfest_01.webp" alt="DevFest 高雄主視覺">
+                  <span>DevFest 高雄 · 年會主視覺</span>
+                </div>
+                <div class="ss-item">
+                  <img src="assets/images/work/kotlin_fb.webp" alt="KotlinConf 直播視覺">
+                  <span>KotlinConf · 直播介面與圖卡</span>
+                </div>
+                <div class="ss-item">
+                  <img src="assets/images/work/kotlin_sponsor.webp" alt="贊助商社群圖卡">
+                  <span>贊助商介紹 · 社群貼文視覺</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 專案 7 & 8 雙欄大圖滿版 -->
+            <div class="projects-split-large">
+              <!-- 專案 7：四季眠 接案文宣 -->
+              <div class="psl-card">
+                <div class="psl-head">
+                  <span class="psl-tag">外接設計案 · 社群宣傳 · 空間指標</span>
+                  <h4 class="psl-title">四季眠 · 品牌宣傳與產品圖解說明</h4>
+                </div>
+                <p class="psl-desc">
+                  接案合作。協助床墊品牌規劃 120 天試睡圖示、節慶促銷貼文、實體門市招牌與床墊結構圖解。
+                </p>
+                <div class="psl-images-3">
+                  <img src="assets/images/work/sijimian_fb.webp" alt="促銷貼文">
+                  <img src="assets/images/work/sijimian_sleep.webp" alt="試睡圖解">
+                  <img src="assets/images/work/sijimian_sign.webp" alt="門市招牌">
+                </div>
+              </div>
+
+              <!-- 專案 8：空間導引與商業櫥窗 -->
+              <div class="psl-card">
+                <div class="psl-head">
+                  <span class="psl-tag">宣導插畫 · 動線導引 · 櫥窗陳列</span>
+                  <h4 class="psl-title">友善工地圍籬導引 &amp; 商業櫥窗設計</h4>
+                </div>
+                <p class="psl-desc">
+                  以親和溫暖的角色插畫簡化施工動線與安全宣導，降低民眾排斥感；參與商業走廊櫥窗立體裝置與陳列。
+                </p>
+                <div class="psl-images-2">
+                  <img src="assets/images/work/behavior_資產_2_2.webp" alt="友善圍籬導引">
+                  <img src="assets/images/work/interior_01.webp" alt="商業櫥窗空間">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <footer class="sheet-footer">
+            <span class="sf-badge">作品集 ｜ P. 06</span>
+          </footer>
+        </article>
+
+        <!-- ==================== SHEET 7: 封底 ==================== -->
+        <article class="sheet sheet-back-cover" id="sheet-7" data-sheet="7">
+          <div class="back-cover-head">
+            <div class="bch-left">RÉSUMÉ &amp; PORTFOLIO</div>
+            <div class="bch-right">PAGE 07 / 07</div>
+          </div>
+
+          <div class="back-hero">
+            <h2>THANK YOU</h2>
+            <div class="sub-lead">感謝您的撥冗閱讀</div>
+            <p>
+              專注把事情踏實做到位。<br>
+              具備能直接落地的視覺設計手感、真實面對客戶的溝通實戰，以及善用 Python 與 AI 工具理清混亂的工作方法。<br>
+              期待有機會與貴團隊合作，共同解決具體問題、創造實質價值！
+            </p>
+          </div>
+
+          <!-- 封底大型聯絡卡 -->
+          <div class="back-contact-card">
+            <div class="bcc-info">
+              <h3>${m.name}</h3>
+              <div class="bcc-role">視覺設計 · 商業溝通 · 流程自動化</div>
+              <div class="bcc-details">
+                <div><b>電話</b> <span>${m.phone || '0970-705-525'}</span></div>
+                <div><b>Email</b> <span>${m.email}</span></div>
+                <div><b>線上版</b> <span>saki949.github.io/2026_portfolio</span></div>
+              </div>
+            </div>
+            <div class="bcc-qr">
+              <div class="bcc-qr-svg">${qrSvgCode}</div>
+              <span>電子版履歷.作品集</span>
+            </div>
+          </div>
+
+          <div class="back-copyright">
+            © 2026 ${m.name} (HUANG, YU-LING). ALL RIGHTS RESERVED.
+          </div>
+
+          <footer class="sheet-footer" style="border-top:none; margin-top:0; padding-top:0;">
+            <span class="sf-badge">封底 ｜ P. 07</span>
+          </footer>
+        </article>
+        `;
+      }
+
+      renderBooklet();
+
+      document.getElementById("printBtn").addEventListener("click", () => {
+        window.print();
+      });
+
+      const togglePhotoBtn = document.getElementById("togglePhotoBtn");
+      togglePhotoBtn.addEventListener("click", () => {
+        activePhoto = activePhoto === "assets/images/photo01.webp" 
+          ? "assets/images/photo02.webp" 
+          : "assets/images/photo01.webp";
+        const img = document.getElementById("coverPhotoImg");
+        if (img) img.src = activePhoto;
+      });
+
+      const toggleSpreadBtn = document.getElementById("toggleSpreadBtn");
+      toggleSpreadBtn.addEventListener("click", () => {
+        app.classList.toggle("spread-view");
+        toggleSpreadBtn.textContent = app.classList.contains("spread-view") 
+          ? "📄 單頁預覽" 
+          : "📖 對開預覽";
+      });
+
+      function updatePageNumbers() {
+        const sheets = Array.from(document.querySelectorAll(".sheet:not(.hide-sheet)"));
+        const total = sheets.length;
+        const totalStr = String(total).padStart(2, "0");
+        sheets.forEach((sheet, idx) => {
+          const currentStr = String(idx + 1).padStart(2, "0");
+          const shRight = sheet.querySelector(".sh-right");
+          if (shRight) {
+            shRight.textContent = `PAGE ${currentStr} / ${totalStr}`;
+          }
+          const bchRight = sheet.querySelector(".bch-right");
+          if (bchRight) {
+            bchRight.textContent = `PAGE ${currentStr} / ${totalStr}`;
+          }
+          const sfBadge = sheet.querySelector(".sf-badge");
+          if (sfBadge) {
+            const label = sheet.classList.contains("sheet-cover") ? "封面" :
+                          sheet.classList.contains("sheet-back-cover") ? "封底" :
+                          sheet.id.match(/sheet-[23]/) ? "履歷" : "作品集";
+            sfBadge.textContent = `${label} ｜ P. ${currentStr}`;
+          }
+        });
+      }
+
+      const toggleCover = document.getElementById("toggleCover");
+      toggleCover.addEventListener("change", (e) => {
+        const cover = document.getElementById("sheet-1");
+        if (cover) cover.classList.toggle("hide-sheet", !e.target.checked);
+        updatePageNumbers();
+      });
+
+      const toggleBackCover = document.getElementById("toggleBackCover");
+      toggleBackCover.addEventListener("change", (e) => {
+        const backCover = document.getElementById("sheet-7");
+        if (backCover) backCover.classList.toggle("hide-sheet", !e.target.checked);
+        updatePageNumbers();
+      });
+
+      updatePageNumbers();
+    })();
+  </script>
+</body>
+</html>
